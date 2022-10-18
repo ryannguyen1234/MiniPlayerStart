@@ -28,7 +28,7 @@ namespace MiniPlayerWpf
             catch (Exception e)
             {
                 MessageBox.Show("Error loading file: " + e.Message, "MiniPlayer", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
+                Application.Current.Shutdown();
             }
 
             // Put the ids in an ObservableCollection, which has methods to add and remove items.
@@ -55,7 +55,7 @@ namespace MiniPlayerWpf
                 songTitle.Content = s.Title;
                 mediaPlayer.Open(new Uri(s.Filename));
             }
-        }        
+        }
 
         private void playButton_Click(object sender, RoutedEventArgs e)
         {

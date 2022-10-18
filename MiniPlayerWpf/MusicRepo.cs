@@ -19,7 +19,7 @@ namespace MiniPlayerWpf
         {
             get
             {
-                return from row in musicDataSet.Tables["song"].AsEnumerable()
+                return from row in musicDataSet?.Tables["song"]?.AsEnumerable()
                           orderby row["id"]
                           select Convert.ToInt32(row["id"]);
             }
@@ -40,21 +40,26 @@ namespace MiniPlayerWpf
         /// <returns>The song's ID</returns>
         public int AddSong(Song s)
         {
-            DataTable table = musicDataSet.Tables["song"];
-            DataRow row = table.NewRow();
+            DataTable? table = musicDataSet.Tables["song"];
+            if (table != null)
+            {
+                DataRow row = table.NewRow();
 
-            row["title"] = s.Title;
-            row["artist"] = s.Artist;
-            row["album"] = s.Album;
-            row["filename"] = s.Filename;
-            row["length"] = s.Length;
-            row["genre"] = s.Genre;
-            table.Rows.Add(row);
+                row["title"] = s.Title;
+                row["artist"] = s.Artist;
+                row["album"] = s.Album;
+                row["filename"] = s.Filename;
+                row["length"] = s.Length;
+                row["genre"] = s.Genre;
+                table.Rows.Add(row);
 
-            // Update this song's ID
-            s.Id = Convert.ToInt32(row["id"]);
+                // Update this song's ID
+                s.Id = Convert.ToInt32(row["id"]);
 
-            return s.Id;
+                return s.Id;
+            }
+
+            return -1;
         }
 
         /// <summary>
@@ -62,14 +67,14 @@ namespace MiniPlayerWpf
         /// </summary>
         /// <param name="songId">ID of song to search for</param>
         /// <returns>The song matching the songId or null if the song wasn't found</returns>
-        public Song GetSong(int songId)
+        public Song? GetSong(int songId)
         {
-            DataTable table = musicDataSet.Tables["song"];
+            DataTable? table = musicDataSet?.Tables["song"];
 
             // Only one row should be selected
             foreach (DataRow row in table.Select("id=" + songId))
             {
-                Song song = new Song
+                Song song = new()
                 {
                     Id = songId,
                     Title = row["title"].ToString(),
@@ -93,9 +98,9 @@ namespace MiniPlayerWpf
         /// </summary>
         /// <param name="filename"></param>
         /// <returns>Song from given filename or null if an error occured reading the file</returns>
-        public Song GetSongDetails(string filename)
+        public Song? GetSongDetails(string filename)
         {
-            Song s = null;
+            Song? s = null;
             try
             {
                 // PM> Install-Package TagLibSharp
