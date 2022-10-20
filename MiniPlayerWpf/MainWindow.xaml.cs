@@ -51,9 +51,15 @@ namespace MiniPlayerWpf
             if (songIdComboBox.SelectedItem != null)
             {
                 int songId = Convert.ToInt32(songIdComboBox.SelectedItem);
-                Song s = musicRepo.GetSong(songId);
-                songTitle.Content = s.Title;
-                mediaPlayer.Open(new Uri(s.Filename));
+                Song? s = musicRepo.GetSong(songId);
+                if (s is not null)
+                {
+                    songTitle.Content = s.Title;
+                    if (s.Filename is not null)
+                    {
+                        mediaPlayer.Open(new Uri(s.Filename));
+                    }
+                }
             }
         }
 
