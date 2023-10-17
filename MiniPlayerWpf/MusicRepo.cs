@@ -100,7 +100,7 @@ namespace MiniPlayerWpf
         /// </summary>
         /// <param name="filename"></param>
         /// <returns>Song from given filename or null if an error occured reading the file</returns>
-        public Song? GetSongDetails(string filename)
+        public static Song? GetSongDetails(string filename)
         {
             Song? s = null;
             try
@@ -180,16 +180,16 @@ namespace MiniPlayerWpf
                 table.Rows.Remove(songRow);
             }
 
-            // Remove from playlist_song every occurance of songId.
-            // Add rows to a separate list before deleting because we'll get an exception
-            // if we try to delete more than one row while looping through table.Rows
+            // Remove from playlist_song every occurance of songId            
             table = musicDataSet.Tables["playlist_song"];
             if (table != null)
             {
+                // Add rows to a separate list before deleting because we'll get an exception
+                // if we try to delete more than one row while looping through table.Rows
                 List<DataRow> rows = new();
                 foreach (DataRow row in table.Rows)
                 {
-                    if (row["song_id"].ToString() == songId.ToString())
+                    if (Convert.ToInt32(row["song_id"]) == songId)
                     {
                         rows.Add(row);
                     }
