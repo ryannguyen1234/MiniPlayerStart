@@ -70,22 +70,24 @@ namespace MiniPlayerWpf
         public Song? GetSong(int songId)
         {
             DataTable? table = musicDataSet?.Tables["song"];
-
-            // Only one row should be selected
-            foreach (DataRow row in table.Select("id=" + songId))
+            if (table != null)
             {
-                Song song = new()
+                // Only one row should be selected
+                foreach (DataRow row in table.Select("id=" + songId))
                 {
-                    Id = songId,
-                    Title = row["title"].ToString(),
-                    Artist = row["artist"].ToString(),
-                    Album = row["album"].ToString(),
-                    Genre = row["genre"].ToString(),
-                    Length = row["length"].ToString(),
-                    Filename = row["filename"].ToString()
-                };
+                    Song song = new()
+                    {
+                        Id = songId,
+                        Title = row["title"].ToString(),
+                        Artist = row["artist"].ToString(),
+                        Album = row["album"].ToString(),
+                        Genre = row["genre"].ToString(),
+                        Length = row["length"].ToString(),
+                        Filename = row["filename"].ToString()
+                    };
 
-                return song;
+                    return song;
+                }
             }
 
             // Must not have found this song ID
@@ -135,19 +137,21 @@ namespace MiniPlayerWpf
         /// <returns>true if the song with the song ID was found, false otherwise</returns>
         public bool UpdateSong(int songId, Song song)
         {
-            DataTable table = musicDataSet.Tables["song"];
+            DataTable? table = musicDataSet.Tables["song"];
+            if (table != null)
+            { 
+                // Only one row should be selected
+                foreach (DataRow row in table.Select("id=" + songId))
+                {
+                    row["title"] = song.Title;
+                    row["artist"] = song.Artist;
+                    row["album"] = song.Album;
+                    row["genre"] = song.Genre;
+                    row["length"] = song.Length;
+                    row["filename"] = song.Filename;
 
-            // Only one row should be selected
-            foreach (DataRow row in table.Select("id=" + songId))
-            {
-                row["title"] = song.Title;
-                row["artist"] = song.Artist;
-                row["album"] = song.Album;
-                row["genre"] = song.Genre;
-                row["length"] = song.Length;
-                row["filename"] = song.Filename;
-
-                return true;
+                    return true;
+                }
             }
 
             // Must not have found the song ID
@@ -164,32 +168,37 @@ namespace MiniPlayerWpf
         {
             // Search the primary key for the selected song and delete it from 
             // the song table
-            DataTable table = musicDataSet.Tables["song"];
-            DataRow songRow = table.Rows.Find(songId);
-            if (songRow == null)
+            DataTable? table = musicDataSet.Tables["song"];
+            if (table != null)
             {
-                return false;
+                DataRow? songRow = table.Rows.Find(songId);
+                if (songRow == null)
+                {
+                    return false;
+                }
+
+                table.Rows.Remove(songRow);
             }
 
-            table.Rows.Remove(songRow);
-
-            // Remove from playlist_song every occurance of songId
+            // Remove from playlist_song every occurance of songId.
             // Add rows to a separate list before deleting because we'll get an exception
             // if we try to delete more than one row while looping through table.Rows
-
-            List<DataRow> rows = new List<DataRow>();
             table = musicDataSet.Tables["playlist_song"];
-            foreach (DataRow row in table.Rows)
+            if (table != null)
             {
-                if (row["song_id"].ToString() == songId.ToString())
+                List<DataRow> rows = new();
+                foreach (DataRow row in table.Rows)
                 {
-                    rows.Add(row);
+                    if (row["song_id"].ToString() == songId.ToString())
+                    {
+                        rows.Add(row);
+                    }
                 }
-            }
 
-            foreach (DataRow row in rows)
-            {
-                row.Delete();
+                foreach (DataRow row in rows)
+                {
+                    row.Delete();
+                }
             }
 
             return true;
@@ -217,7 +226,7 @@ namespace MiniPlayerWpf
                 {
                     Console.WriteLine("Row:");
                     int i = 0;
-                    foreach (object item in row.ItemArray)
+                    foreach (object? item in row.ItemArray)
                     {
                         Console.WriteLine(" " + table.Columns[i].Caption + "=" + item);
                         i++;
