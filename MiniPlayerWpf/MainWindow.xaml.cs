@@ -55,6 +55,12 @@ namespace MiniPlayerWpf
                 if (s is not null)
                 {
                     songTitle.Content = s.Title;
+                    songAlbum.Content = s.Album;
+                    songArtist.Content = s.Artist;
+                    songFilename.Content = s.Filename;
+                    songLength.Content = s.Length;
+                    songGenre.Content = s.Genre;
+                    
                     if (s.Filename is not null)
                     {
                         mediaPlayer.Open(new Uri(s.Filename));
@@ -71,6 +77,38 @@ namespace MiniPlayerWpf
         private void stopButton_Click(object sender, RoutedEventArgs e)
         {
             mediaPlayer.Stop();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new Microsoft.Win32.OpenFileDialog
+            {
+                FileName = "",
+                DefaultExt = "*.wma;*.wav;*mp3;*.m4a",
+                Filter = "Media files|*.mp3;*.m4a;*.wma;*.wav|MP3 (*.mp3)|*.mp3|M4A (*.m4a)|*.m4a|Windows Media Audio (*.wma)|*.wma|Wave files (*.wav)|*.wav|All files|*.*"
+            };
+
+            bool? result = openFileDialog.ShowDialog();
+            if (result == true)
+            {
+                // Selected file is openFileDialog.FileName
+            }
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            //if (songIdComboBox.SelectedItem != null)
+            //{
+            //    int songId = Convert.ToInt32(songIdComboBox.SelectedItem);
+            //    Song? s = musicRepo.GetSong(songId);
+            //    if (s is not null)
+            //    {
+            //        if (s.Filename is not null)
+            //        {
+            //            mediaPlayer.Open(new Uri(s.Filename));
+            //        }
+            //    }
+            //}
         }
     }
 }

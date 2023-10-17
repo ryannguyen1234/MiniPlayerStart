@@ -16,8 +16,16 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <Label x:Name="songTitle" Content="title" Height="30" />
         <Button x:Name="playButton" Content="Play" Margin="10,0,0,10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="75" Click="playButton_Click"/>
         <Button x:Name="stopButton" Content="Stop" Margin="0,0,10,10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="75" Click="stopButton_Click"/>
+        <Label x:Name="songAlbum" Content="album" HorizontalAlignment="Left" Margin="10,161,0,0" VerticalAlignment="Top" Width="804"/>
+        <Label x:Name="songTitle" Content="title" HorizontalAlignment="Left" Margin="10,109,0,0" VerticalAlignment="Top" Width="799"/>
+        <Label x:Name="songArtist" Content="artist" HorizontalAlignment="Left" Margin="10,135,0,0" VerticalAlignment="Top" Width="800"/>
+        <Label x:Name="songFilename" Content="filename" HorizontalAlignment="Left" Margin="10,187,0,0" VerticalAlignment="Top" Width="705"/>
+        <Label x:Name="songLength" Content="length" HorizontalAlignment="Left" Margin="10,213,0,0" VerticalAlignment="Top" Width="740"/>
+        <Label x:Name="songGenre" Content="genre" HorizontalAlignment="Left" Margin="10,239,0,0" VerticalAlignment="Top" Width="732"/>
+        <Button Content="Add" HorizontalAlignment="Left" Margin="286,399,0,0" VerticalAlignment="Top" Width="76" Click="Button_Click"/>
+        <Button Content="Delete" HorizontalAlignment="Left" Margin="410,399,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_1"/>
+
     </Grid>
 </Window>
